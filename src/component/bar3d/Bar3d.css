@@ -1,0 +1,42 @@
+.labelLine {
+    z-index: 10;
+    position: absolute;
+}
+
+.labelBox {
+    position: relative;
+    background: url('/image/msgBg.png') no-repeat center;
+    width: 200px;
+    height: 220px;
+    top: 38px;
+    left: 105px;
+
+    transform-origin: bottom;
+    transform: scaleY(0);
+    animation: 1s move linear forwards;
+    visibility: hidden;
+}
+
+.labelBox > span {
+    position: absolute;
+    top: 40px;
+    left: 13px;
+}
+
+.labelBox p.textVal {
+    position: absolute;
+    top: 30px;
+    left: 115px;
+}
+
+.labelBox p {
+    position: absolute;
+    top: 50px;
+    left: 75px;
+}
+
+@keyframes move {
+    to {
+        transform: scaleY(1);
+    }
+}

@@ -7,6 +7,8 @@ import ChangeSvgTo3d from '../component/changeSvgTo3d/ChangeSvgTo3d';
 import Box3d from '../component/box3d/Box3d';
 import DrawLine3d from '../component/drawLine3d/DrawLine3d';
 import Font3d from '../component/font3d/Font3d';
+import DrawFace from '../component/drawFace/DrawFace';
+// import Main from '../component/nongye_bar/module/main';
 
 class PageTwo extends Component {
   constructor() {
@@ -25,7 +27,8 @@ class PageTwo extends Component {
           <li><Box3d width={500} height={300}/></li>
           <li><DrawLine3d width={500} height={300}/></li>
           <li><Font3d width={500} height={300}/></li>
-          <li></li>
+          <li><DrawFace width={500} height={300}/></li>
+          {/*<li><Main/></li>*/}
         </ul>
       </div>
     )

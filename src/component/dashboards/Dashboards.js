@@ -183,8 +183,8 @@ export default (props) => {
 
     const change_g = group.append('g')
       .attr('class', 'change_g');
-    // 添加指向点
 
+    // 添加指向点
     let angle = startAngle + perAngle * (value / 10); // 获取当前指数所占角度
     let pointR = 8;
 

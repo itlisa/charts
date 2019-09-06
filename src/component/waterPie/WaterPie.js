@@ -1,8 +1,9 @@
 import React, {useRef, useEffect, useState} from 'react';
 import * as d3 from 'd3';
 
+
 /**
- * 水球饼图组件封装
+ * 饼图组件封装
  *@param props= {
  *  width,
  *  height,
@@ -13,7 +14,6 @@ import * as d3 from 'd3';
  * */
 
 export default (props) => {
-
   const chartRef = useRef(null);
   const [params, setParmas] = useState(null);
 
@@ -77,9 +77,9 @@ export default (props) => {
     });
 
     // totalData
-    const sum = pieData.reduce((acc, cur) => {
-      return acc + cur.value;
-    }, 0);
+    // const sum = pieData.reduce((acc, cur) => {
+    //   return acc + cur.value;
+    // }, 0);
 
     // 添加分组
     const g = group.selectAll('g')
@@ -118,12 +118,12 @@ export default (props) => {
         .attr('font-size', '24px')
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .text(~~(d.value / sum * 100) + '%');
+        .text(d.value + '%');
 
       in_g.append('text')
         .attr('fill', '#fff')
         .attr('font-size', '14px')
-        .attr('dy',30)
+        .attr('dy', 30)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .text(d.data.name);
@@ -136,6 +136,7 @@ export default (props) => {
 
 
     // 移入添加阴影效果
+
     g.on('mouseenter', function (d, i) {
 
       if (svg.select('.in_g')) {
@@ -143,15 +144,22 @@ export default (props) => {
       }
 
       s(d, d3.select(this));
+      if (props.selected instanceof Function) {
+        props.selected.call(null, d.value)
+      }
+    });
 
-    })
     // .on('mouseleave', function (d, i) {
     //   svg.select('#shadow_path' + i).remove();
     //   svg.select('#text' + i).remove();
     // })
   }
 
+
   return (
-    <div ref={chartRef} style={{position: 'absolute', top: props.top || 0, left: props.left || 0}}></div>
+    <div>
+      <div ref={chartRef} style={{position: 'absolute', top: props.top || 0, left: props.left || 0}}></div>
+    </div>
+
   )
 };

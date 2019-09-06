@@ -1,6 +1,16 @@
 import React, {useRef, useEffect, useState} from 'react';
 import * as d3 from 'd3';
 
+/**
+ * 仪表盘
+ * @params props = {
+ * width,
+ * height,
+ * top,
+ * left,
+ * datas
+ * }
+ * */
 export default (props) => {
   const dashBoardChart = useRef(null);
   const [params, setParams] = useState(null);
@@ -44,7 +54,7 @@ export default (props) => {
     let defs = group.append('defs');
 
     // 添加线性渐变
-    let warnBg = defs.append("radialGradient")
+    let warnBg = defs.append("linearGradient")
       .attr("id", "myGradient")
       .attr('x1', '0%')
       .attr('y1', '0%')
@@ -59,6 +69,24 @@ export default (props) => {
     warnBg.append('stop')
       .attr('offset', 1)
       .attr('style', 'stop-color:#ff7200');
+
+
+    // 添加放射性变换，生成空心填充颜色
+    let radialGradient = defs.append("linearGradient")
+      .attr("id", "myRadialGradient")
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
+      .attr('y2', '0%');
+    // 添加颜色
+    radialGradient.append('stop')
+      .attr('offset', 0.2)
+      .attr('style', 'stop-color:rgba(255,255,255,0)');
+
+    radialGradient.append('stop')
+      .attr('offset', 1)
+      .attr('style', 'stop-color:rgba(7,243,255,0.8)');
+
 
     let r = R - Rr;
     const arcPath = d3.arc()
@@ -84,6 +112,7 @@ export default (props) => {
       .each(function (d, i) {
         d.x = Math.sin(d.startAngle) * (r - 20);
         d.y = -Math.cos(d.startAngle) * (r - 20);
+
         if (i %= 4) {
 
           d.x1 = Math.sin(d.startAngle) * (r - 6);
@@ -91,6 +120,7 @@ export default (props) => {
 
           d.x2 = Math.sin(d.startAngle) * r;
           d.y2 = -Math.cos(d.startAngle) * r;
+
         } else {
 
           d.x1 = Math.sin(d.startAngle) * (r - 10);
@@ -102,12 +132,15 @@ export default (props) => {
 
       });
 
+    // 绘制边缘弧线
     g.append('path')
       .attr('d', function (d, i) {
+        if (i === 40) return;
         return arcPath(d)
       })
       .attr('fill', '#07ecf6');
 
+    // 绘制刻度线
     g.append('line')
       .attr('x1', function (d) {
         return d.x1;
@@ -124,6 +157,7 @@ export default (props) => {
       .attr('stroke', '#03c5ff')
       .attr('stroke-width', 2);
 
+    // 添加刻度值
     let mark = -10;
     g.each(function (g, i) {
       let n = i;
@@ -132,22 +166,38 @@ export default (props) => {
         svg.select('.g' + n)
           .append('text')
           .attr('font-size', '16px')
-          .attr('fill', '#fff')
-          .attr('transform', function (d, i) {
+          .attr('fill', '#b9d1f0')
+          .attr('transform', function (d) {
             return `translate(${d.x},${d.y})`
           })
           .attr('text-anchor', 'middle')
           .attr('dominant-baseline', 'middle')
           .text(mark);
       }
-    })
+    });
 
-    setParams({group})
+    setParams({group, perAngle, startAngle, R, r})
   }
 
   function draw() {
     const datas = props.datas;
     const group = params.group;
+    const perAngle = params.perAngle;
+    const startAngle = params.startAngle;
+    const R = params.R;
+    const r = params.r;
+
+    // 添加背景渐变
+    let endAngle = startAngle + perAngle * (datas.value / 10 * 4); // 获取当前指数所占角度
+
+    const arcPath = d3.arc()
+      .innerRadius(0)
+      .outerRadius(R);
+    group.append('path')
+      .attr('d', function () {
+        return arcPath({startAngle, endAngle})
+      })
+      .attr('fill', 'url(#myRadialGradient)');
 
     group.append('text')
       .attr('fill', '#fff')
@@ -173,6 +223,31 @@ export default (props) => {
       .attr('dominant-baseline', 'middle')
       .attr('dx', 5)
       .text('%');
+
+    // 绘制指向箭头
+    group.append('path')
+      .attr('id', 'arrow')
+      .attr('d', function () {
+        // 顶点坐标
+        let x = Math.sin(endAngle) * (R + 30);
+        let y = -Math.cos(endAngle) * (R + 30);
+
+        // 左下点坐标
+        let x1 = Math.sin(endAngle - transfer(2)) * (r - 30);
+        let y1 = -Math.cos(endAngle - transfer(2)) * (r - 30);
+
+        // 右下点坐标
+        let x2 = Math.sin(endAngle + transfer(2)) * (r - 30);
+        let y2 = -Math.cos(endAngle + transfer(2)) * (r - 30);
+
+        return `M${x},${y}L${x1},${y1}L${x2},${y2}Z`;
+      })
+      .attr('fill', '#fff');
+
+  }
+
+  function transfer(s) {
+    return s * Math.PI / 180;
   }
 
   return (

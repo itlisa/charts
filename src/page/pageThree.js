@@ -6,8 +6,6 @@ export default () => {
   const [data, setData] = useState(null);
   const [surData, setSurData] = useState(null);
 
-
-
   useEffect(() => {
     const datas = {name: '返乡大学生占乡村大学生数量', value: 70};
     const surData = {name: '男性未婚占男性比重', value: 68};

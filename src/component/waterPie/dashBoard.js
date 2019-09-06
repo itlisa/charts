@@ -80,48 +80,51 @@ export default (props) => {
 
       <img src={bg_pic} alt="背景图片"/>
 
-      {/* 左边饼图 */}
-      <Pie width={188}
-                height={203}
-                datas={leftPieData}
-                colors={['#028fff', '#00cfff', '#2bfdb6', '#fff200']}
-                top={110}
-                left={72}
-                selected={(d) => {
-                  setLeftBallData(d)
-                }}
-      />
-      <WaveChart width={120}
-                 height={120}
-                 top={152}
-                 left={106}
-                 ballBorderColor={'transparent'}
-                 ballBorder={1}
-                 value={leftBallData}
-      />
+      <div style={{position: 'absolute', top: 0, left: -30}}>
+
+        {/* 左边饼图 */}
+        <Pie width={188}
+             height={203}
+             datas={leftPieData}
+             colors={['#028fff', '#00cfff', '#2bfdb6', '#fff200']}
+             top={110}
+             left={72}
+             selected={(d) => {
+               setLeftBallData(d)
+             }}
+        />
+        <WaveChart width={120}
+                   height={120}
+                   top={152}
+                   left={106}
+                   ballBorderColor={'transparent'}
+                   ballBorder={1}
+                   value={leftBallData}
+        />
 
 
-      {/* 右边饼图 */}
-      <Pie width={188}
-                height={203}
-                datas={rightPieData}
-                colors={['#028fff', '#00cfff', '#2bfdb6', '#27dd5f', '#fff200']}
-                top={110}
-                left={610}
-                selected={(d) => {
-                  setRightBallData(d)
-                }}
-      />
-      <WaveChart width={120}
-                 height={120}
-                 top={152}
-                 left={644}
-                 ballBorderColor={'transparent'}
-                 ballBorder={1}
-                 value={rightBallData}
-      />
-      {/* 仪表盘 */}
-      <DashBoard width={280} height={280} top={45} left={298} datas={dashBoardData}/>
+        {/* 右边饼图 */}
+        <Pie width={188}
+             height={203}
+             datas={rightPieData}
+             colors={['#028fff', '#00cfff', '#2bfdb6', '#27dd5f', '#fff200']}
+             top={110}
+             left={610}
+             selected={(d) => {
+               setRightBallData(d)
+             }}
+        />
+        <WaveChart width={120}
+                   height={120}
+                   top={152}
+                   left={644}
+                   ballBorderColor={'transparent'}
+                   ballBorder={1}
+                   value={rightBallData}
+        />
+        {/* 仪表盘 */}
+        <DashBoard width={280} height={280} top={45} left={298} datas={dashBoardData}/>
+      </div>
     </div>
   )
 }
